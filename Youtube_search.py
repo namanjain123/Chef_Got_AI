@@ -22,11 +22,8 @@ def get_first_five_results(query):
 
     return results
 
-def main():
-    search_query = input("Enter your search query for YouTube: ")
-    search_results = get_first_five_results(search_query)
-
-    print("First 5 search results on YouTube for '{}':".format(search_query))
+def get_youtubelinks(Cooking_recipe):
+    search_results = get_first_five_results(Cooking_recipe)
     for idx, result in enumerate(search_results, start=1):
         print(f"{idx}. Title: {result[0]}")
         print(f"   URL: {result[1]}")
@@ -35,6 +32,3 @@ def main():
     # Open the first search result in the web browser
     if search_results:
         webbrowser.open(search_results[0][1])
-
-if __name__ == "__main__":
-    main()
