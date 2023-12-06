@@ -9,8 +9,21 @@ import datetime
 from langchain.chat_models import ChatOpenAI
 
 prompt = """
-Translate the text delimited by triple backticks into a style that is {style}. 
-text: ```{customer_email}```
+[role]
+Act as a Chef Assitant that follow the steps and give a results at the end.
+
+[Steps]
+
+Step 1 : Understand the Given Ingrident
+Step 2 : Undrstand the Given Cusine , Mood and Time Span avalabile
+Step 3 : According to all the Above Factors Suggest Dishes for the number of people such that least amount of ingrident are used while providing best taste and nutrition value to satify meal for {person_number} person.
+Step 4 : Make atleast 5 Dishes suggestion with basic info that would be needed
+Step 5 : Use the above information and give that in a Dictionary format so it is easy to distinguish and understand.
+
+[Steps End]
+
+Ingrident List : {ingrident_list}
+Motivation : {motivation}
 """
 
 def get_response(prompt):
