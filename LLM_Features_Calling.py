@@ -1,6 +1,7 @@
 import os
 import openai
 import sys
+from langchain.prompts import PromptTemplate
 sys.path.append('../..')
 
 from dotenv import load_dotenv, find_dotenv
@@ -8,8 +9,8 @@ _ = load_dotenv(find_dotenv()) # read local .env file
 import datetime
 from langchain.chat_models import ChatOpenAI
 
-prompt = """
-[role]
+prompt_template = """
+[Role]
 Act as a Chef Assitant that follow the steps and give a results at the end.
 
 [Steps]
@@ -26,11 +27,13 @@ Ingrident List : {ingrident_list}
 Motivation : {motivation}
 """
 
-def get_response(prompt):
-  chat = ChatOpenAI(model="gpt-3.5-turbo") 
+def get_response(ingrident,motivation):
+  chat = ChatOpenAI(model="gpt-3.5-turbo")
+  prompt = PromptTemplate.from_template(prompt)
+  prompt.format(ingrident_list=ingrident, motivation=motivation)
   response = chat.complete(prompt)
   return response
 
-response = get_response(prompt)
+response = get_response()
 print(response)
 
