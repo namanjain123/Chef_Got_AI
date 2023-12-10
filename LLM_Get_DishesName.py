@@ -9,9 +9,9 @@ _ = load_dotenv(find_dotenv()) # read local .env file
 import datetime
 from langchain.chat_models import ChatOpenAI
 
-prompt_template = """
+prompt_template_dishes = """
 [Role]
-Act as a Chef Assitant who follow the steps and gives results at the end gives only dishes name in JSON
+Act as a Chef Assitant who follow the steps and gives results at the end gives dishes name with their brief in JSON
 [Steps]
 
 Step 1 : Understand the Given Ingrident
@@ -22,19 +22,28 @@ Step 4 : Make atleast 7 Dishes suggestion with basic info that would be needed.
 
 Ingrident List : ``` {ingrident_list} ``` 
 Motivation : ```{motivation}``` 
+Result: ```
 """
+prompt_template_dsihes="""
+[Role]
+You are a assitant that make use of Master Details and Pointers and the Time to make a small note about his motivation of food using his body details , what meal he is having and the pointers into less then 50 word
+Master Details : ```{master_details}```
+Pointer: ```{pointer}```
 
-def get_response(ingrident,motivation):
-  chat = ChatOpenAI(model="gpt-3.5-turbo")
-  prompt = PromptTemplate.from_template(prompt)
+"""
+chat = ChatOpenAI(model="gpt-3.5-turbo")
+def get_Dishes_option(ingrident,motivation):
+  prompt = PromptTemplate.from_template(prompt_template_dishes)
   prompt.format(ingrident_list=ingrident, motivation=motivation)
   response = chat.complete(prompt)
   return response
 
-response = get_response()
-print(response)
-
-
+def get_Motivation(details,pointers):
+  prompt = PromptTemplate.from_template(prompt_template_dsihes)
+  prompt.format(master_details=details, pointer=pointers)
+  response = chat.complete(prompt)
+  return response
+  
 
 # Sample 
 
