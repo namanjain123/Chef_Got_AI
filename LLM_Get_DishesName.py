@@ -43,7 +43,27 @@ def get_Motivation(details,pointers):
   prompt.format(master_details=details, pointer=pointers)
   response = chat.complete(prompt)
   return response
-  
+
+# Now we will chain them both in easy fashion
+from langchain import SequentialChain
+def chained_get_Dishes_option(ingrident,details,pointers):
+
+  chain = SequentialChain()
+
+  # Add get_Motivation function to chain
+  chain.add_step(get_Motivation, 
+                  details=details, 
+                  pointers=pointers)
+  # Capture output of get_Motivation  
+  motivation = chain.run()[-1] 
+  # Add get_Dishes_option function to chain 
+  chain.add_step(get_Dishes_option,
+                  ingrident=ingrident,
+                  motivation=motivation)
+
+  # Run the chain
+  response = chain.run()
+  return response
 
 # Sample 
 
