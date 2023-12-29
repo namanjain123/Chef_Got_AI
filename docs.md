@@ -153,3 +153,34 @@ namespace HindalcoGPT.Qdrant
 }
 
 
+
+## Prompt chainning
+
+using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.Connectors.OpenAI;
+
+public class Program
+{
+  public static void Main(string[] args)
+  {
+    IKernel kernel = InitializeKernel();
+    var jokeFunc = kernel.RegisterNativeFunction("JokeGenerator", "tell_joke");
+var poemFunc = kernel.RegisterNativeFunction("PoemGenerator", "continue_poem");
+var jokePrompt = $@"Generate a joke about {{jokeTopic}}: {{JokeGenerator.tell_joke}}";
+
+var poemPrompt = @"Continue the poem:
+                   {{jokeResult}} 
+                   {{PoemGenerator.continue_poem 5}}";
+Console.Write("Enter joke topic: ");
+var jokeTopic = Console.ReadLine();
+var jokeResult = kernel.Invoke(jokePrompt, new KernelArguments(){{"jokeTopic", jokeTopic}}); 
+
+var poemArgs = new KernelArguments(){{"jokeResult", jokeResult}};
+
+var poemResult = kernel.Invoke(poemPrompt, poemArgs);
+Console.WriteLine(poemResult);
+
+  }
+}
+
+
